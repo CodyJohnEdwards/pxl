@@ -15,12 +15,6 @@ const int MAX_HEIGHT = 1000;
 const int OCTAVES = 6;
 
 
-// Calculate the distance between two points
-float distance(SDL_Point p1, SDL_Point p2)
-{
-  return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
-}
-
 int main(int argc, char *argv[])
 {
 
@@ -30,8 +24,8 @@ int main(int argc, char *argv[])
   double** noiseMap = core.generateTerrain();
   
   
-  SDL_Window *window = NULL;
-  SDL_Renderer *renderer = NULL;
+  SDL_Window *window = core.window;
+  SDL_Renderer *renderer = core.renderer;
   SDL_Renderer *renderer2 = NULL;
 
   SDL_Rect rect = {
@@ -44,23 +38,6 @@ int main(int argc, char *argv[])
       50,
       5,
       5};
-
-  // Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
-  {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL: %s", SDL_GetError());
-    return 1;
-  }
-
-  // Create a window and renderer
-  window = SDL_CreateWindow("SDL 2 Program", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
-  if (!window)
-  {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window: %s", SDL_GetError());
-    SDL_Quit();
-    return 1;
-  }
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   // Load the texture image
   SDL_Texture *texture = NULL;
@@ -241,7 +218,7 @@ int main(int argc, char *argv[])
                 dstRect.x,
                 dstRect.y};
 
-            float d = distance(playerPos, rect2Pos);
+            float d = core.distance(playerPos, rect2Pos);
             float brightness = 1.0 - d / 100;
             brightness = fmaxf(brightness, 0.0); // clamp @ 1 || 0
 

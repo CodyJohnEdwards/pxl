@@ -1,5 +1,7 @@
 #ifndef LOGIC_H
 #define LOGIC_H
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -9,16 +11,48 @@
 #include <chrono>
 #include <ctime>
 /**
- * @brief 
+ * @brief
  * SDL2 Wrapper + Game Logic
  */
 class Logic
 {
 public:
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
+    Logic()
+    {
+        // Initialize SDL
+        if (SDL_Init(SDL_INIT_VIDEO) < 0)
+        {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL: %s", SDL_GetError());
+            SDL_Quit();
+        }
+
+        // Create a window and renderer
+        window = SDL_CreateWindow("SDL 2 Program", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
+        if (!window)
+        {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window: %s", SDL_GetError());
+            SDL_Quit();
+        }
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    }
+    /**
+     * @brief
+     * Calculate the distance between two points
+     * @param p1
+     * @param p2
+     * @return float
+     */
+    float distance(SDL_Point p1, SDL_Point p2)
+    {
+        return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
+    }
+
 protected:
-const int MAX_WIDTH = 5000;
-const int OCTAVES = 6;
-const int MAX_HEIGHT = 1000;
+    const int MAX_WIDTH = 5000;
+    const int OCTAVES = 6;
+    const int MAX_HEIGHT = 1000;
     /**
      * @brief
      * Computes the dot product of the distance and gradient vectors
@@ -44,7 +78,14 @@ const int MAX_HEIGHT = 1000;
         return (dx * gradientX + dy * gradientY);
     }
 
-    // Computes the Perlin noise value at a given point
+    /**
+     * @brief
+     * Computes the Perlin noise value at a given point
+     * @param x
+     * @param y
+     * @param gradients
+     * @return double
+     */
     double perlin(double x, double y, double *gradients[])
     {
         // Determine the grid cell coordinates
@@ -72,12 +113,12 @@ const int MAX_HEIGHT = 1000;
     }
 
     /**
-     * @brief 
+     * @brief
      * Generates a 2D Perlin noise map with a given width and height
-     * @param width 
-     * @param height 
-     * @param gradients 
-     * @param noiseMap 
+     * @param width
+     * @param height
+     * @param gradients
+     * @param noiseMap
      */
     void generatePerlinNoise(int width, int height, double *gradients[], double *noiseMap[])
     {
@@ -111,11 +152,11 @@ const int MAX_HEIGHT = 1000;
     }
 
     /**
-     * @brief 
+     * @brief
      * Generates random gradient vectors for each grid point
-     * @param width 
-     * @param height 
-     * @param gradients 
+     * @param width
+     * @param height
+     * @param gradients
      */
     void generateGradients(int width, int height, double *gradients[])
     {
@@ -135,17 +176,6 @@ const int MAX_HEIGHT = 1000;
         }
     }
 
-    /**
-     * @brief 
-     * Calculate the distance between two points
-     * @param p1 
-     * @param p2 
-     * @return float 
-     */
-    float distance(SDL_Point p1, SDL_Point p2)
-    {
-        return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
-    }
 private:
 };
 

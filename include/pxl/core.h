@@ -2,13 +2,18 @@
 #define CORE_H
 #include <pxl/logic.h>
 /**
- * @brief 
+ * @brief
  * Applied Logic & Physics
  */
 class Core : public Logic
 {
+private:
 
 public:
+    Core()
+    {
+      
+    }
     double **generateTerrain()
     {
         // Allocate memory for the gradients and noise map
@@ -35,8 +40,6 @@ public:
         // Return the noise map
         return noiseMap;
     }
-
-private:
 };
 
 #endif // CORE_H
