@@ -19,6 +19,9 @@ class Logic
 public:
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
+    const int MAX_WIDTH = 5000;
+    const int OCTAVES = 6;
+    const int MAX_HEIGHT = 1000;
     Logic()
     {
         // Initialize SDL
@@ -27,7 +30,6 @@ public:
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL: %s", SDL_GetError());
             SDL_Quit();
         }
-
         // Create a window and renderer
         window = SDL_CreateWindow("SDL 2 Program", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
         if (!window)
@@ -36,6 +38,12 @@ public:
             SDL_Quit();
         }
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (!renderer)
+        {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create renderer: %s", SDL_GetError());
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+        }
     }
     /**
      * @brief
@@ -50,9 +58,7 @@ public:
     }
 
 protected:
-    const int MAX_WIDTH = 5000;
-    const int OCTAVES = 6;
-    const int MAX_HEIGHT = 1000;
+
     /**
      * @brief
      * Computes the dot product of the distance and gradient vectors

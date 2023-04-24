@@ -14,7 +14,7 @@ public:
     {
       
     }
-    double **generateTerrain()
+    double **generateTerrainMap()
     {
         // Allocate memory for the gradients and noise map
         double *gradients[MAX_HEIGHT];
