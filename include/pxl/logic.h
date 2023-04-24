@@ -24,7 +24,10 @@ public:
     const int MAX_HEIGHT = 1000;
     Logic()
     {
-        // Initialize SDL
+       
+    }
+    void init(){
+         // Initialize SDL
         if (SDL_Init(SDL_INIT_VIDEO) < 0)
         {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL: %s", SDL_GetError());

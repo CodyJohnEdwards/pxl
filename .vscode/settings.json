@@ -45,5 +45,8 @@
         "chrono": "cpp",
         "ctime": "cpp",
         "ratio": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "SDLK"
+    ]
 }

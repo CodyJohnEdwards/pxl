@@ -5,11 +5,10 @@ class Renderer{
 public:
     Core core;
     Renderer(){
+        core.init();
         double **terrainMap = core.generateTerrainMap();
 
-        SDL_Window *window = core.window;
-        SDL_Renderer *renderer = core.renderer;
-        SDL_Renderer *renderer2 = NULL;
+
 
         SDL_Rect rect = {
             1280 / 2,
@@ -89,7 +88,7 @@ public:
                 cameraRect.h};
 
             // Clear the renderer
-            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+            // SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
             SDL_RenderClear(renderer);
 
             SDL_Event event;
@@ -308,6 +307,9 @@ public:
         }
     }
 private:
+        SDL_Window *window = core.window;
+        SDL_Renderer *renderer = core.renderer;
+ 
 protected:
 };
 #endif // RENDERER_H

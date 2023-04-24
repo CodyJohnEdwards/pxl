@@ -1,18 +1,17 @@
 #ifndef CORE_H
 #define CORE_H
 #include <pxl/logic.h>
+#include <pxl/physics.h>
 /**
  * @brief
  * Applied Logic & Physics
  */
-class Core : public Logic
+class Core : public Logic, Physics
 {
 private:
-
 public:
     Core()
     {
-      
     }
     double **generateTerrainMap()
     {
