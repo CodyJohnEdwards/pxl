@@ -1,30 +1,76 @@
 
-# Welcome to PXL Game Engine
+# Pxl
 
-PXL is a game engine designed to help developers create 2D games with ease. With PXL, you can create games that are fast, responsive, and visually stunning.
+Pxl is small simple game engine is built ontop of SDL2, it features a component-based architecture divided into several components.
 
-## Features
+### Logic
 
-PXL comes packed with a wide range of features that make it an ideal choice for game developers. Some of its features include:
+The Logic component of the Pxl game engine is responsible for handling the game's logic. This includes things like game mechanics, AI, and game rules.
 
-* **Fast Rendering** : PXL's rendering engine is highly optimized, allowing for fast and efficient rendering of graphics.
-* **Easy-to-Use API** : PXL's API is designed to be easy to use, making it ideal for developers of all skill levels.
-* **Powerful Physics Engine** : PXL's physics engine is highly advanced and provides realistic physics simulation for all types of objects.
-* **Flexible Audio System** : PXL's audio system allows for the creation of complex soundscapes with ease.
-* **Modular Design** : PXL's modular design makes it easy to extend and customize the engine to fit your specific needs.
+### Physics
 
-## Getting Started
+The Physics component of the Pxl game engine is responsible for handling the game's physics. This includes things like collisions, movement, and gravity.
 
-To get started with PXL, simply download the latest version from our website and follow the installation instructions. Once installed, you can start using PXL to create your first game.
+### Core
 
-## Documentation
+The Core component of the Pxl game engine is responsible for providing a foundation for the other components. This includes things like data structures, memory management, and threading.
 
-PXL comes with comprehensive documentation that covers every aspect of the engine, from installation to advanced features. Our documentation is available online and can be accessed from within the engine itself.
+### Renderer
 
-## Support
+The Renderer component of the Pxl game engine is responsible for rendering the game world. This includes things like lighting, shaders, and textures.
 
-If you need help using PXL, our support team is always ready to assist you. You can reach out to us through our website or via email.
+### UI
 
-## Contributing
+The UI component of the Pxl game engine is responsible for providing a user interface for the game. This includes things like menus, buttons, and HUD elements.
 
-PXL is an open-source project, and we welcome contributions from the community. If you would like to contribute to the project, please check out our GitHub repository and join our community.
+### Controller
+
+The Controller component of the Pxl game engine is responsible for handling user input. This includes things like keyboard input, mouse input, and gamepad input.
+
+```mermaid
+classDiagram
+	class Logic{
+	}
+	class Physics{
+	}
+	class Core{
+	}
+	class Renderer{
+	}
+	class UI{
+	}
+	class Controller{
+	}
+	class Camera{
+	}
+	class World{
+	}
+	class GameObject{
+	}
+	class Entity{
+	}
+	class Pxl{
+	}
+	class NPC{
+	}
+	class Enemy{
+	}
+	class Player{
+	}
+
+	Logic <|-- Core
+	Physics <|-- Core
+	Core --> Renderer
+	Renderer --> World
+	Renderer --> UI
+	Renderer --> Controller
+	Camera <|-- Controller
+	World --> GameObject
+	GameObject <|-- Entity
+	GameObject <|-- Pxl
+	Entity <|-- NPC
+	Entity <|-- Enemy
+	Entity <|-- Player
+
+
+```
