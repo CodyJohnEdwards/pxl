@@ -13,7 +13,7 @@ public:
      *
      */
     World(Renderer &renderer) : renderer_(renderer) {}
-
+    
 protected:
 private:
     Renderer& renderer_;

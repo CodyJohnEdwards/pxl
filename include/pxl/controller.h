@@ -1,49 +1,65 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include <pxl/renderer.h>
+#include <SDL2/SDL.h>
 struct Velocity
 {
-    int right;
-    int left;
-    int up;
-    int down;
+    int right = 0;
+    int left = 0;
+    int up = 0;
+    int down = 0;
+};
+struct Controls{
+    bool left = false;
+    bool right = false;
+    bool jump = false;
 };
 class Controller
 {
 public:
     Velocity velocity;
-    Controller(Renderer &renderer) : renderer_(renderer)
+    Controls controls;
+    bool isJumping = false;
+    bool active = false;
+    Controller()
     {
+        
+    }
+    void listen(){
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
             case SDL_KEYDOWN:
+                this->active = true;
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_SPACE:
                 case SDLK_w:
-                    // if (!isJumping)
-                    // {
-                        // isJumping = true;
+                    if (!isJumping)
+                    {
+                        isJumping = true;
                         velocity.up = 20;
-                    // }
+                    }
                     break;
                 case SDLK_a:
                     velocity.left = -10;
                     velocity.right = 0;
+                    this->controls.left = true;
+                    this->controls.right = false;
                     // flip = SDL_FLIP_HORIZONTAL;
                     break;
                 case SDLK_d:
-                    // cameraRect.x += velPos;
                     velocity.right = 10;
                     velocity.left = 0;
+                    this->controls.right = true;
+                    this->controls.left = false;
                     // flip = SDL_FLIP_NONE;
                     break;
                 }
                 break;
             case SDL_KEYUP:
+                this->active = false;
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_SPACE:
@@ -83,9 +99,15 @@ public:
             velocity.right = 10;
         }
     }
+    void resetVelocity(){
+        velocity.up = 0;
+        velocity.down = 0;
+        velocity.right = 0;
+        velocity.left = 0;
+    }
 
 protected:
 private:
-  Renderer& renderer_;
+
 };
 #endif
