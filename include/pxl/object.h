@@ -12,23 +12,34 @@ public:
         this->boundingBox_.y = y;
         this->boundingBox_.h = h;
         this->boundingBox_.w = w;
-        
+
     }
     
-    void updateShader(int r, int g , int b){
+    void setShader(int r, int g , int b){
         SDL_SetTextureColorMod(this->texture_,r,g,b);
+        render();
     }
 
     void render(){
-        SDL_RenderCopyEx(
-            this->renderer_,
-            this->texture_, 
-            &this->sprites_[this->currentFrame_],
-            &this->boundingBox_,
-            0,
-            NULL,
-            this->flip_
-        );
+        // SDL_RenderCopyEx(
+        //     renderer_,
+        //     this->texture_, 
+        //     &this->sprites_[this->currentFrame_],
+        //     &this->boundingBox_,
+        //     0,
+        //     NULL,
+        //     this->flip_
+        // );
+        SDL_RenderCopy(renderer_, texture_, NULL, &boundingBox_);
+
+    }
+
+    SDL_Point getPosition(){
+        return {boundingBox_.x,boundingBox_.y};
+    }
+
+    SDL_Rect getBoundingBox(){
+        return boundingBox_;
     }
 
     private:

@@ -3,6 +3,7 @@
 #include <pxl/core.h>
 #include <pxl/camera.h>
 #include <pxl/controller.h>
+#include <pxl/object.h>
 class Renderer{
 public:
     Core core;
@@ -79,6 +80,9 @@ public:
             // Clear the renderer
             SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
             SDL_RenderClear(renderer);
+
+
+        
             controller.listen();
             if(controller.controls.left){
                 flip = SDL_FLIP_HORIZONTAL;
@@ -101,53 +105,68 @@ public:
                         if (terrainMap[row][tile] > 0)
                         {
 
-                            SDL_Rect dstRect = {
+                            // SDL_Rect dstRect = {
+                            //     tileX - camera.renderBox.x,
+                            //     tileY - camera.renderBox.y,
+                            //     5,
+                            //     5};
+
+
+                            Object pxl(
+                                renderer,
+                                texture,
                                 tileX - camera.renderBox.x,
                                 tileY - camera.renderBox.y,
                                 5,
-                                5};
+                                5
+                            );
 
-                            SDL_Point rect2Pos = {
-                                dstRect.x,
-                                dstRect.y};
+                            // SDL_Point rect2Pos = {
+                            //     dstRect.x,
+                            //     dstRect.y};
 
-                            float d = core.distance(playerPos, rect2Pos);
+                            float d = core.distance(playerPos, pxl.getPosition());
                             float brightness = 1.0 - d / 100;
                             brightness = fmaxf(brightness, 0.0); // clamp @ 1 || 0
 
-                            SDL_SetTextureColorMod(texture, brightness * 255, brightness * 255, brightness * 255);
-                            SDL_RenderCopy(renderer, texture, NULL, &dstRect);
-                            if (SDL_HasIntersection(&dstRect, &characterDestRect))
+                            // SDL_SetTextureColorMod(texture, brightness * 255, brightness * 255, brightness * 255);
+                            pxl.setShader(brightness * 255, brightness * 255, brightness * 255);
+                            SDL_Rect boundingBox = pxl.getBoundingBox();
+                            // pxl.render();
+                            // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                            if (SDL_HasIntersection(&boundingBox, &characterDestRect))
                             {
-                                if (dstRect.y > characterDestRect.y - 27)
+                                if (pxl.getBoundingBox().y > characterDestRect.y - 27)
                                 {
                                     controller.velocity.down = 0;
-                                    SDL_SetTextureColorMod(texture, 0, 255, 0);
-                                    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                                    pxl.setShader(0, 255, 0);
+                                    // pxl.render();
+                                    // SDL_RenderCopy(renderer, texture, NULL, &pxl.getBoundingBox());
                                 }
-                                if (dstRect.x + 5 > characterDestRect.x + 16 && dstRect.y + 5 < characterDestRect.y + 54)
+                                if (pxl.getBoundingBox().x + 5 > characterDestRect.x + 16 && pxl.getBoundingBox().y + 5 < characterDestRect.y + 54)
                                 {
                                     controller.velocity.right = 0;
                                     controller.velocity.up = 10;
                                     controller.isJumping = true;
-                                    SDL_SetTextureColorMod(texture, 255, 0, 0);
-                                    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                                    pxl.setShader(255, 0, 0);
+                                    // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                                 }
 
-                                if (dstRect.x + 5 < characterDestRect.x + 16 && dstRect.y + 5 < characterDestRect.y + 54)
+                                if (pxl.getBoundingBox().x + 5 < characterDestRect.x + 16 && pxl.getBoundingBox().y + 5 < characterDestRect.y + 54)
                                 {
                                     controller.velocity.left = 0;
                                     controller.velocity.up = 10;
                                     controller.isJumping = true;
-                                    SDL_SetTextureColorMod(texture, 0, 0, 255);
-                                    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                                    pxl.setShader(0, 0, 255);
+                                    // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                                 }
 
-                                if (dstRect.y + 5 < characterDestRect.y + 27)
+                                if (pxl.getBoundingBox().y + 5 < characterDestRect.y + 27)
                                 {
                                     controller.velocity.up = 0;
-                                    SDL_SetTextureColorMod(texture, 255, 255, 0);
-                                    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                                    pxl.setShader(255, 255, 0);
+                                    
+                                    // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                                 }
                             }
                         }
