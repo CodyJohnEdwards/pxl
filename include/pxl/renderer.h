@@ -4,6 +4,7 @@
 #include <pxl/camera.h>
 #include <pxl/pxl.h>
 #include <pxl/controller.h>
+#include <pxl/entity.h>
 class Renderer{
 public:
     Core core;
@@ -27,6 +28,17 @@ public:
         texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // PLAYER SPRITE SHEET
         //  Load the sprite sheet into a texture
         SDL_Surface *spriteSheetSurface = IMG_Load("32bit.png");
@@ -43,14 +55,18 @@ public:
             sprites[i].h = 54;     // Each sprite is 64 pixels tall
         }
 
+        // Draw the current frame of the animation onto the screen
+        SDL_Rect characterDestRect = {0, 0, 32, 54};
+
+
+        Entity player(renderer, spriteSheetTexture, 0, 0, 32, 54);
+
         // Define the current frame of the animation
         int currentFrame = 0;
         int frameTime = 100; // Time between frames in milliseconds
         Uint32 lastFrameTime = SDL_GetTicks();
 
 
-        // Draw the current frame of the animation onto the screen
-        SDL_Rect characterDestRect = {0, 0, 32, 54};
 
         
     
@@ -122,18 +138,20 @@ public:
                             // SDL_SetTextureColorMod(texture, brightness * 255, brightness * 255, brightness * 255);
                             pxl.setShader(brightness * 255, brightness * 255, brightness * 255);
                             SDL_Rect boundingBox = pxl.getBoundingBox();
+                            SDL_Rect playerBoundingBox = player.getBoundingBox();
+
                             // pxl.render();
                             // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
-                            if (SDL_HasIntersection(&boundingBox, &characterDestRect))
+                            if (SDL_HasIntersection(&boundingBox, &playerBoundingBox))
                             {
-                                if (pxl.getBoundingBox().y > characterDestRect.y - 27)
+                                if (pxl.getBoundingBox().y > playerBoundingBox.y - 27)
                                 {
                                     controller.velocity.down = 0;
                                     pxl.setShader(0, 255, 0);
                                     // pxl.render();
                                     // SDL_RenderCopy(renderer, texture, NULL, &pxl.getBoundingBox());
                                 }
-                                if (pxl.getBoundingBox().x + 5 > characterDestRect.x + 16 && pxl.getBoundingBox().y + 5 < characterDestRect.y + 54)
+                                if (pxl.getBoundingBox().x + 5 > playerBoundingBox.x + 16 && pxl.getBoundingBox().y + 5 < playerBoundingBox.y + 54)
                                 {
                                     controller.velocity.right = 0;
                                     controller.velocity.up = 10;
@@ -142,7 +160,7 @@ public:
                                     // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                                 }
 
-                                if (pxl.getBoundingBox().x + 5 < characterDestRect.x + 16 && pxl.getBoundingBox().y + 5 < characterDestRect.y + 54)
+                                if (pxl.getBoundingBox().x + 5 < playerBoundingBox.x + 16 && pxl.getBoundingBox().y + 5 < playerBoundingBox.y + 54)
                                 {
                                     controller.velocity.left = 0;
                                     controller.velocity.up = 10;
@@ -151,7 +169,7 @@ public:
                                     // SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                                 }
 
-                                if (pxl.getBoundingBox().y + 5 < characterDestRect.y + 27)
+                                if (pxl.getBoundingBox().y + 5 < playerBoundingBox.y + 27)
                                 {
                                     controller.velocity.up = 0;
                                     pxl.setShader(255, 255, 0);
@@ -190,11 +208,12 @@ public:
 
             rect.x = camera.renderBox.w / 2 - 5 / 2;
             rect.y = camera.renderBox.h / 2 - 5 / 2;
-            characterDestRect.x = camera.renderBox.w / 2 - 5 / 2;
-            characterDestRect.y = camera.renderBox.h / 2 - 5 / 2;
+            player.setPosition(camera.renderBox.w / 2 - 5 / 2,  camera.renderBox.h / 2 - 5 / 2);
+            // playerBoundingBox.y = camera.renderBox.h / 2 - 5 / 2;
 
             SDL_SetTextureColorMod(texture, 255, 255, 255);
-            SDL_RenderCopyEx(renderer, spriteSheetTexture, &sprites[currentFrame], &characterDestRect, 0, NULL, flip);
+            player.render();
+            // SDL_RenderCopyEx(renderer, spriteSheetTexture, &sprites[currentFrame], &characterDestRect, 0, NULL, flip);
 
             // Update the current frame of the animation based on elapsed time
             if (controller.active)
