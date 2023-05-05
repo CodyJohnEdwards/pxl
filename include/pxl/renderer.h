@@ -2,8 +2,8 @@
 #define RENDERER_H
 #include <pxl/core.h>
 #include <pxl/camera.h>
+#include <pxl/pxl.h>
 #include <pxl/controller.h>
-#include <pxl/object.h>
 class Renderer{
 public:
     Core core;
@@ -101,18 +101,10 @@ public:
                     // check if tile is within renderRect
                     if (tileX >= camera.renderBox.x && tileX < camera.renderBox.x + camera.renderBox.w && tileY >= camera.renderBox.y && tileY < camera.renderBox.y + camera.renderBox.h)
                     {
-                        // printf("rendering terrain");
                         if (terrainMap[row][tile] > 0)
                         {
 
-                            // SDL_Rect dstRect = {
-                            //     tileX - camera.renderBox.x,
-                            //     tileY - camera.renderBox.y,
-                            //     5,
-                            //     5};
-
-
-                            Object pxl(
+                            Pxl pxl(
                                 renderer,
                                 texture,
                                 tileX - camera.renderBox.x,
@@ -121,9 +113,7 @@ public:
                                 5
                             );
 
-                            // SDL_Point rect2Pos = {
-                            //     dstRect.x,
-                            //     dstRect.y};
+                      
 
                             float d = core.distance(playerPos, pxl.getPosition());
                             float brightness = 1.0 - d / 100;
@@ -177,11 +167,9 @@ public:
             if (controller.isJumping)
             {
                 float dt = 1.0 / 60;
-                // cameraRect.y -= velUp * dt;
                 jumpDuration -= dt;
                 controller.velocity.up -= dt;
                 camera.renderBox.y += (controller.velocity.down - controller.velocity.up);
-                // velUp -= 0.05;
                 if (controller.velocity.up <= 0)
                 {
                     controller.velocity.up = 0;

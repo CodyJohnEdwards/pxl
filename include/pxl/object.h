@@ -6,12 +6,12 @@ class Object
 public:
     Object(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y, int w, int h)
     {
-        this->renderer_ = renderer;
-        this->texture_ = texture;
-        this->boundingBox_.x = x;
-        this->boundingBox_.y = y;
-        this->boundingBox_.h = h;
-        this->boundingBox_.w = w;
+        renderer_ = renderer;
+        texture_ = texture;
+        boundingBox_.x = x;
+        boundingBox_.y = y;
+        boundingBox_.h = h;
+        boundingBox_.w = w;
 
     }
     
@@ -20,7 +20,7 @@ public:
         render();
     }
 
-    void render(){
+    virtual void render(){
         // SDL_RenderCopyEx(
         //     renderer_,
         //     this->texture_, 
@@ -42,7 +42,7 @@ public:
         return boundingBox_;
     }
 
-    private:
+protected:
     int currentFrame_ = 0;
     SDL_RendererFlip flip_ = SDL_FLIP_NONE;
     SDL_Renderer *renderer_;
